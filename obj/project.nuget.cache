@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "QOobGUkF0Yg=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\rosan\\Desktop\\Coding\\Resource Monitor\\Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\rosan\\.nuget\\packages\\system.configuration.configurationmanager\\10.0.8\\system.configuration.configurationmanager.10.0.8.nupkg.sha512",
+    "C:\\Users\\rosan\\.nuget\\packages\\system.diagnostics.eventlog\\10.0.8\\system.diagnostics.eventlog.10.0.8.nupkg.sha512",
+    "C:\\Users\\rosan\\.nuget\\packages\\system.diagnostics.performancecounter\\10.0.8\\system.diagnostics.performancecounter.10.0.8.nupkg.sha512",
+    "C:\\Users\\rosan\\.nuget\\packages\\system.security.cryptography.protecteddata\\10.0.8\\system.security.cryptography.protecteddata.10.0.8.nupkg.sha512"
+  ],
+  "logs": []
+}
