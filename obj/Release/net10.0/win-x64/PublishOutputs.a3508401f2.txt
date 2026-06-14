@@ -1,2 +1,0 @@
-C:\Users\rosan\Desktop\Coding\Resource Monitor\bin\Release\net10.0\win-x64\publish\Application.pdb
-C:\Users\rosan\Desktop\Coding\Resource Monitor\bin\Release\net10.0\win-x64\publish\Application.exe

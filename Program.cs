@@ -7,6 +7,23 @@ namespace Application
 {
     class Program
     {
+
+        static int getRAMSize()
+        {
+            var computerInfo = new Microsoft.VisualBasic.Devices.ComputerInfo();
+
+            // 1. Get total bytes
+            ulong memBytes = computerInfo.TotalPhysicalMemory;
+
+            // 2. Convert to raw MB as a decimal
+            double rawMb = (double) memBytes / (1024 * 1024);
+
+            // 3. Divide by 1024 to find the "fractional GBs", round UP, then multiply back by 1024
+            int exactMb = (int) Math.Ceiling(rawMb / 1024.0) * 1024;
+
+            return exactMb;
+        }
+
         static void Main(string[] args)
         {
             // Nullable variables to store system metrics. 
@@ -24,6 +41,8 @@ namespace Application
             PerformanceCounter diskIdleTime = new("PhysicalDisk", "% Idle Time", "_Total");
             diskIdleTime.NextValue();
 
+            int RAMsize = getRAMSize();
+
             try
             {
                 // Infinite loop to continuously monitor metrics and update the console display.
@@ -33,10 +52,9 @@ namespace Application
                     Thread.Sleep(1000);
 
                     // Fetch the latest values. 
-                    // RAM usage is calculated assuming a system total of 16384 MB (16GB). 
                     // Disk activity is calculated inversely from idle time. Clamp prevents values outside the 0-100 range.
                     CPU_inUse = cpuUsage.NextValue();
-                    RAM_inUse = 100 * ((16384 - availableRAM.NextValue()) / 16384);
+                    RAM_inUse = 100 * ((RAMsize - availableRAM.NextValue()) / RAMsize);
                     disk_activity = Math.Clamp((100 - diskIdleTime.NextValue()), 0, 100);
 
                     // Construct a 20-character visual progress bar for the CPU. 
@@ -65,7 +83,7 @@ namespace Application
                         WriteLine(DateTime.Now.ToString("T"));
 
                         // Output CPU metric. If it hits 100%, display (MAXED) instead of the percentage to maintain clean formatting.
-                        if (CPU_inUse <= 99.9)
+                        if (CPU_inUse <= 99.99999)
                         {
                             WriteLine($"CPU Usage:\t{CPU}\t\t({CPU_inUse:00.0}%)");
                         }
@@ -75,7 +93,7 @@ namespace Application
                         }
 
                         // Output RAM metric, handling the maxed-out edge case.
-                        if (RAM_inUse <= 99.9)
+                        if (RAM_inUse <= 99.99999)
                         {
                             WriteLine($"RAM Usage:\t{RAM}\t\t({RAM_inUse:00.0}%)");
                         }
@@ -85,7 +103,7 @@ namespace Application
                         }
 
                         // Output Disk metric, handling the maxed-out edge case.
-                        if (disk_activity <= 99.9)
+                        if (disk_activity <= 99.99999)
                         {
                             WriteLine($"Disk Activity:\t{disk}\t\t({disk_activity:00.0}%)");
                         }
