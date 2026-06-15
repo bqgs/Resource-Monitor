@@ -10,10 +10,8 @@ namespace Application
 
         static int getRAMSize()
         {
-            var computerInfo = new Microsoft.VisualBasic.Devices.ComputerInfo();
-
             // 1. Get total bytes
-            ulong memBytes = computerInfo.TotalPhysicalMemory;
+            ulong memBytes = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
 
             // 2. Convert to raw MB as a decimal
             double rawMb = (double) memBytes / (1024 * 1024);
@@ -41,6 +39,7 @@ namespace Application
             PerformanceCounter diskIdleTime = new("PhysicalDisk", "% Idle Time", "_Total");
             diskIdleTime.NextValue();
 
+            // Store how many megabytes of RAM the computer has in the RAMSize variable
             int RAMsize = getRAMSize();
 
             try
@@ -59,19 +58,19 @@ namespace Application
 
                     // Construct a 20-character visual progress bar for the CPU. 
                     // Each block represents 5%. It concatenates 'busy' (filled) and 'free' (empty) characters.
-                    int numberCPU = Math.Clamp((int)(CPU_inUse / 5), 0, 20);
+                    int numberCPU = CPU_inUse >= 99.9 ? 20 : (int) CPU_inUse / 5;
                     string CPU_busy = new('■', numberCPU);
                     string CPU_free = new('□', 20 - numberCPU);
                     string CPU = string.Concat(CPU_busy, CPU_free);
 
                     // Construct the 20-character progress bar for RAM.
-                    int numberRAM = (int)RAM_inUse / 5;
+                    int numberRAM = RAM_inUse >= 99.9 ? 20 : (int) RAM_inUse / 5;
                     string RAM_busy = new('■', numberRAM);
                     string RAM_free = new('□', 20 - numberRAM);
                     string RAM = string.Concat(RAM_busy, RAM_free);
 
                     // Construct the 20-character progress bar for Disk Activity.
-                    int numberdisk = (int)disk_activity / 5;
+                    int numberdisk = disk_activity >= 99.9 ? 20 : (int) disk_activity / 5;
                     string disk_busy = new('■', numberdisk);
                     string disk_free = new('□', 20 - numberdisk);
                     string disk = string.Concat(disk_busy, disk_free);
@@ -83,7 +82,7 @@ namespace Application
                         WriteLine(DateTime.Now.ToString("T"));
 
                         // Output CPU metric. If it hits 100%, display (MAXED) instead of the percentage to maintain clean formatting.
-                        if (CPU_inUse <= 99.99999)
+                        if (Math.Round(CPU_inUse ?? 0.0, 1) <= 99.9)
                         {
                             WriteLine($"CPU Usage:\t{CPU}\t\t({CPU_inUse:00.0}%)");
                         }
@@ -93,7 +92,7 @@ namespace Application
                         }
 
                         // Output RAM metric, handling the maxed-out edge case.
-                        if (RAM_inUse <= 99.99999)
+                        if (Math.Round(RAM_inUse ?? 0.0, 1) <= 99.9)
                         {
                             WriteLine($"RAM Usage:\t{RAM}\t\t({RAM_inUse:00.0}%)");
                         }
@@ -103,7 +102,7 @@ namespace Application
                         }
 
                         // Output Disk metric, handling the maxed-out edge case.
-                        if (disk_activity <= 99.99999)
+                        if (Math.Round(disk_activity ?? 0.0, 1) <= 99.9)
                         {
                             WriteLine($"Disk Activity:\t{disk}\t\t({disk_activity:00.0}%)");
                         }
@@ -125,5 +124,6 @@ namespace Application
                 WriteLine($"\n\n\n\n\n{e}");
             }
         }
+
     }
 }
