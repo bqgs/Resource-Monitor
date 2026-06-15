@@ -39,7 +39,7 @@ namespace Application
             PerformanceCounter diskIdleTime = new("PhysicalDisk", "% Idle Time", "_Total");
             diskIdleTime.NextValue();
 
-            // Store how many megabytes of RAM the computer has in the RAMSize variable
+            // Store how many megabytes of RAM the computer has in the RAMsize variable
             int RAMsize = getRAMSize();
 
             try
