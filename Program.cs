@@ -42,6 +42,8 @@ namespace Application
             // Store how many megabytes of RAM the computer has in the RAMsize variable
             int RAMsize = getRAMSize();
 
+            CursorVisible = false;
+
             try
             {
                 // Infinite loop to continuously monitor metrics and update the console display.
